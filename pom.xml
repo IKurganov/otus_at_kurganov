@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.kurganov</groupId>
-    <artifactId>otus_at</artifactId>
+    <artifactId>otus_at_kurganov</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
