@@ -112,6 +112,7 @@ fabric.properties
 
 ### Maven ###
 target/
+!target/classes/log4j2.xml
 logs.log
 pom.xml.tag
 pom.xml.releaseBackup
