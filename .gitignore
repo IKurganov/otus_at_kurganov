@@ -111,7 +111,10 @@ fabric.properties
 .idea/codestream.xml
 
 ### Maven ###
-target/
+target/*
+target/classes/*
+!target/classes/log4j2.xml
+logs.log
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
