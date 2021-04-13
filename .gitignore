@@ -112,6 +112,7 @@ fabric.properties
 
 ### Maven ###
 target/
+logs.log
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
