@@ -21,8 +21,13 @@ public class FirstTest {
 
     @Before
     public void startUp() {
-        /*System.out.println("Test of title on website: " + testConfig.baseUrl() + " with server-port -  " + testConfig.port() +
-                " will run with maximum count of threads = " + testConfig.maxThreads() + ". This is just demonstration of Owner");*/
+        log.info("\nTest of title on website: \n"
+                + testConfig.baseUrl()
+                + " \nwith server-port - "
+                + testConfig.port()
+                + " \nwill run with maximum count of threads = "
+                + testConfig.maxThreads()
+                + ". \nThis is just demonstration of Owner");
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         log.info("Драйвер поднят");
