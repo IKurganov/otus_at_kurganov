@@ -70,24 +70,21 @@ public class ThirdHomework {
         log.info("Поищем второй телефон");
         String anotherBrand = articleTitle.contains("Samsung") ? "Xiaomi" : "Samsung";
         WebElement secondArticle = driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '"+ anotherBrand +"')]"));
-        Actions actions = new Actions(driver);
-        actions.moveToElement(secondArticle).pause(400L).build().perform();
         // add to comparison button
         //secondArticle.findElement(By.xpath("//div[contains(@aria-label,'сравнению')]/div"));
         //driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '"+ anotherBrand +"')]"))
         //driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '"+ anotherBrand +"')]//ancestor::article//div[contains(@aria-label,'сравнению')]/div"))
         //actions.moveToElement(secondArticle.findElement(By.xpath("//ancestor::article//div[contains(@aria-label,'сравнению')]/div"))).pause(400L).build().perform();
-        actions.moveToElement(driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '"+ anotherBrand +"')]//ancestor::article//div[contains(@aria-label,'сравнению')]/div")))
-                .pause(400L).build().perform();
-        driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '"+ anotherBrand +"')]//ancestor::article//div[contains(@aria-label,'сравнению')]/div")).click();
-        articleTitle = secondArticle.findElement(By.xpath("//h3[@data-zone-name = 'title']/a")).getAttribute("title");
-        comparisonPopup = new WebDriverWait(driver, 4).until(
+        driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '"+ anotherBrand +"')]//ancestor::article//div[contains(@aria-label,'сравнению')]/div"))
+                .click();
+        articleTitle = secondArticle.getAttribute("title");
+        comparisonPopup = new WebDriverWait(driver, 2).until(
                 ExpectedConditions.visibilityOf(
                         driver.findElement(By.xpath(String.format(popupLocator, articleTitle)))));
         assertEquals("Поп-ап должен отображаться", true, comparisonPopup.isDisplayed());
-
-
-
+        log.info("Перейдем в сравнение");
+        driver.findElement(By.xpath("//span[text()='Сравнить']")).click();
+        assertEquals(2,driver.findElements(By.xpath("//div[@data-tid='a86a07a1 2d4d9fc1']")).size());
     }
 
     @Test
