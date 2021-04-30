@@ -97,11 +97,10 @@ public class SecondHomework {
         actions.moveToElement(emailInput)
                 .build().perform();
         emailInput.sendKeys("test@test.ru");
-        // дождемся кликабельности кнопки подписки после ввода имейл
-        WebElement subscribeButton = driver.findElement(By.xpath("//button[@text = 'Подписаться']"));
+        // дождемся активности кнопки подписки после ввода имейл
+        WebElement subscribeButton = driver.findElement(By.xpath("//button[normalize-space(text()) = 'Подписаться']"));
         new WebDriverWait(driver, 2)
-                .until(ExpectedConditions
-                        .elementToBeClickable(subscribeButton));
+                .until(ExpectedConditions.not(ExpectedConditions.attributeContains(subscribeButton,"disabled","disabled")));
         subscribeButton.click();
         // дождемся появления текста и проверим его
         WebElement successTextElement = new WebDriverWait(driver, 1)
