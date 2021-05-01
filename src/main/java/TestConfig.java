@@ -10,6 +10,8 @@ public interface TestConfig extends Config {
 
     String baseUrl();
 
+    String yandexMarketUrl();
+
     @DefaultValue("42")
         //указываем на тот случай, если мы не укажем maxThreads в файле конфига TestConfig
     int maxThreads();
