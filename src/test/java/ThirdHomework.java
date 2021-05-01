@@ -5,9 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -70,11 +68,7 @@ public class ThirdHomework {
         log.info("Поищем второй телефон");
         String anotherBrand = articleTitle.contains("Samsung") ? "Xiaomi" : "Samsung";
         WebElement secondArticle = driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '"+ anotherBrand +"')]"));
-        // add to comparison button
-        //secondArticle.findElement(By.xpath("//div[contains(@aria-label,'сравнению')]/div"));
-        //driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '"+ anotherBrand +"')]"))
-        //driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '"+ anotherBrand +"')]//ancestor::article//div[contains(@aria-label,'сравнению')]/div"))
-        //actions.moveToElement(secondArticle.findElement(By.xpath("//ancestor::article//div[contains(@aria-label,'сравнению')]/div"))).pause(400L).build().perform();
+        // нажмём на кнопку для сравнения по второму телефону
         driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '"+ anotherBrand +"')]//ancestor::article//div[contains(@aria-label,'сравнению')]/div"))
                 .click();
         articleTitle = secondArticle.getAttribute("title");
@@ -82,25 +76,16 @@ public class ThirdHomework {
                 ExpectedConditions.visibilityOf(
                         driver.findElement(By.xpath(String.format(popupLocator, articleTitle)))));
         assertEquals("Поп-ап должен отображаться", true, comparisonPopup.isDisplayed());
+
         log.info("Перейдем в сравнение");
-        driver.findElement(By.xpath("//span[text()='Сравнить']")).click();
+        Actions actions = new Actions(driver);
+        actions.moveToElement(driver.findElement(By.cssSelector("input#header-search"))).build().perform();
+        comparisonPopup.findElement(By.xpath("//a[@href='/my/compare-lists']/parent::div")).click();
+
+        log.info("Посмотрим, что там 2 телефона");
         assertEquals(2,driver.findElements(By.xpath("//div[@data-tid='a86a07a1 2d4d9fc1']")).size());
     }
 
-    @Test
-    //TODO удалить потом
-    public void tele2NumberSearchTest() {
-        driver.get("https://msk.tele2.ru/shop/number");
-        // проверим, что появились номера, скинем в ноль ожидание
-        driver.manage().timeouts().implicitlyWait(0, TimeUnit.MILLISECONDS);
-        log.info("Сайт теле 2 открыт");
-        log.info("Проведём тест поиска номера");
-        driver.findElement(By.name("searchNumber")).sendKeys("97");
-        // поиск номеров начинается автоматически
-        new WebDriverWait(driver, 3)
-                .until(ExpectedConditions
-                        .visibilityOf(driver.findElement(By.cssSelector("div.product-group"))));
-    }
 
     @After
     public void stop() {
