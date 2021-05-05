@@ -24,7 +24,7 @@ public class SecondHomework {
 
     @Before
     public void startUp() {
-        log.info("Let's test some sh** on website: {} and others", testConfig.baseUrl());
+        log.info("Let's test something on website: {} and others", testConfig.baseUrl());
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
@@ -54,9 +54,12 @@ public class SecondHomework {
         driver.manage().timeouts().implicitlyWait(0, TimeUnit.MILLISECONDS);
         log.info("Сайт теле 2 открыт");
         log.info("Проведём тест поиска номера");
-        driver.findElement(By.name("searchNumber")).sendKeys("97");
+        new WebDriverWait(driver, 5)
+                .until(ExpectedConditions
+                        .visibilityOf(driver.findElement(By.name("searchNumber"))))
+                .sendKeys("97");
         // поиск номеров начинается автоматически
-        new WebDriverWait(driver, 3)
+        new WebDriverWait(driver, 5)
                 .until(ExpectedConditions
                         .visibilityOf(driver.findElement(By.cssSelector("div.product-group"))));
     }
@@ -78,7 +81,7 @@ public class SecondHomework {
         // здесь стоит поставить явное ожидание, так как элемент может быть и не виден
         String answer = new WebDriverWait(driver, 1)
                 .until(ExpectedConditions
-                .visibilityOf(question.findElement(By.xpath("following-sibling::div[contains(@class, 'faq-question__answer')]")))).getText();
+                        .visibilityOf(question.findElement(By.xpath("following-sibling::div[contains(@class, 'faq-question__answer')]")))).getText();
 
         assertEquals("Сверим ожидаемый и актуальный ответ на вопросы - упадёт, если не сойдётся",
                 "Программу курса в сжатом виде можно увидеть на странице курса после блока с преподавателями. Подробную программу курса можно скачать кликнув на “Скачать подробную программу курса”",
@@ -100,7 +103,7 @@ public class SecondHomework {
         // дождемся активности кнопки подписки после ввода имейл
         WebElement subscribeButton = driver.findElement(By.xpath("//button[normalize-space(text()) = 'Подписаться']"));
         new WebDriverWait(driver, 2)
-                .until(ExpectedConditions.not(ExpectedConditions.attributeContains(subscribeButton,"disabled","disabled")));
+                .until(ExpectedConditions.not(ExpectedConditions.attributeContains(subscribeButton, "disabled", "disabled")));
         subscribeButton.click();
         // дождемся появления текста и проверим его
         WebElement successTextElement = new WebDriverWait(driver, 1)
