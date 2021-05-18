@@ -52,7 +52,7 @@ public class ThirdHomework {
 
         log.info("Подождём исчезновения лоадера. Затем найдем телефоны и проверим плашку");
 
-        new WebDriverWait(driver, 3).until(ExpectedConditions.invisibilityOf(driver.findElement(By.cssSelector("div[data-tid='8bc8e36b']"))));
+        new WebDriverWait(driver, 5).until(ExpectedConditions.invisibilityOf(driver.findElement(By.cssSelector("div[data-tid='8bc8e36b']"))));
         WebElement firstArticle = driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article[@data-autotest-id][1]"));
         String articleTitle = firstArticle.findElement(By.xpath("//h3[@data-zone-name = 'title']/a")).getAttribute("title");
 
@@ -66,7 +66,6 @@ public class ThirdHomework {
                 ExpectedConditions.visibilityOf(
                         driver.findElement(By.xpath(String.format(popupLocator, articleTitle)))));
         assertEquals("Поп-ап должен отображаться", true, comparisonPopup.isDisplayed());
-
         log.info("Поищем второй телефон");
         String anotherBrand = articleTitle.contains("Samsung") ? "Xiaomi" : "Samsung";
         WebElement secondArticle = driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '"+ anotherBrand +"')]"));
@@ -78,11 +77,12 @@ public class ThirdHomework {
                 ExpectedConditions.visibilityOf(
                         driver.findElement(By.xpath(String.format(popupLocator, articleTitle)))));
         assertEquals("Поп-ап должен отображаться", true, comparisonPopup.isDisplayed());
-
         log.info("Перейдем в сравнение");
         Actions actions = new Actions(driver);
         actions.moveToElement(driver.findElement(By.cssSelector("input#header-search"))).build().perform();
-        comparisonPopup.findElement(By.xpath("//a[@href='/my/compare-lists']/parent::div")).click();
+        new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOf(comparisonPopup));
+        new WebDriverWait(driver, 5).until(
+                ExpectedConditions.elementToBeClickable(comparisonPopup.findElement(By.xpath("//a[@href='/my/compare-lists']/parent::div")))).click();
 
         log.info("Посмотрим, что там 2 телефона");
         assertEquals(2,driver.findElements(By.xpath("//div[@data-tid='a86a07a1 2d4d9fc1']")).size());
