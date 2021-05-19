@@ -60,7 +60,7 @@ public class ThirdHomework {
         addToComparisonButton.click();
 
         // подождём плашку
-        String popupLocator = "//div[@data-apiary-widget-id ='/content/popupInformer']//div[text() ='Товар %s добавлен к сравнению']";
+        String popupLocator = "//div[@data-apiary-widget-id ='/content/popupInformer']//div[text() ='Товар %s добавлен к сравнению']/parent::div";
         // тут уже в принципе если упадем, то печалька, но все же добавлю ассерт
         WebElement comparisonPopup = new WebDriverWait(driver, 4).until(
                 ExpectedConditions.visibilityOf(
@@ -77,14 +77,41 @@ public class ThirdHomework {
                 ExpectedConditions.visibilityOf(
                         driver.findElement(By.xpath(String.format(popupLocator, articleTitle)))));
         assertEquals("Поп-ап должен отображаться", true, comparisonPopup.isDisplayed());
-        log.info("Перейдем в сравнение");
-        Actions actions = new Actions(driver);
-        actions.moveToElement(driver.findElement(By.cssSelector("input#header-search"))).build().perform();
-        new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOf(comparisonPopup));
-        new WebDriverWait(driver, 5).until(
-                ExpectedConditions.elementToBeClickable(comparisonPopup.findElement(By.xpath("//a[@href='/my/compare-lists']/parent::div")))).click();
+        log.info("Перейдем в сравнение - попытаемся найти анимированный поп-ап");
 
-        log.info("Посмотрим, что там 2 телефона");
+        // КЛАДБИЩЕ ДОМАШНИХ РЕШЕНИЙ
+
+        // Данное решение работало у меня, но не работало на бОльшем экране, судя по всему - по сути заглушка, я поднимался и всё
+        // Actions actions = new Actions(driver);
+        //actions.moveToElement(driver.findElement(By.cssSelector("input#header-search"))).build().perform();
+
+        // эти Вэйты бесполезны, хоть чутка пиксель появляется - все, в АТАКУ ГРЫЗИ ЕГО АТА ИЩИ КНОПКУ - а нифига, она не до конца появилась, уймись и подожди - не хочет
+        // new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOf(comparisonPopup));
+        /*new WebDriverWait(driver, 5).until(
+                ExpectedConditions.presenceOfElementLocated(comparisonPopup.findElement(By.xpath("//a[@href='/my/compare-lists']/parent::div")))).click();*/
+
+        /*
+        даже с другими локаторами не работает ((((
+        new WebDriverWait(driver, 5).until(
+                ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='Сравнить']/parent::a/parent::div")));
+        new WebDriverWait(driver, 5).until(
+                ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Сравнить']/parent::a/parent::div")));
+        */
+
+
+        //TODO В Мире Костылей - https://stackoverflow.com/questions/44912203/selenium-web-driver-java-element-is-not-clickable-at-point-x-y-other-elem - перепробовал варианты отсюда, все, как один не срабатывали
+        // JS тоже не сработал, опять же правильным вариантом мне видится ожидание окончания загрузки анимации - там есть такой вариант, но я не смог найти animated, или навроде того
+        // Но вот этот вариант работает без доп.подпрыгиваний
+
+
+        // Написал костыль, пока он спит - люблю его
+        driver.findElement(By.cssSelector("input#header-search")).sendKeys(Keys.UP);
+
+        //... и оглушил им кнопку, теперь не убежит
+        driver.findElement(By.xpath("//span[text()='Сравнить']/parent::a/parent::div")).click();
+
+
+        log.info("Посмотрим наконец, что там 2 телефона");
         assertEquals(2,driver.findElements(By.xpath("//div[@data-tid='a86a07a1 2d4d9fc1']")).size());
     }
 
