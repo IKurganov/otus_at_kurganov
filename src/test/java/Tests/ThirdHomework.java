@@ -7,7 +7,9 @@ import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -68,18 +70,19 @@ public class ThirdHomework {
         assertEquals("Поп-ап должен отображаться", true, comparisonPopup.isDisplayed());
         log.info("Поищем второй телефон");
         String anotherBrand = articleTitle.contains("Samsung") ? "Xiaomi" : "Samsung";
-        WebElement secondArticle = driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '"+ anotherBrand +"')]"));
+        WebElement secondArticle = driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '" + anotherBrand + "')]"));
         // нажмём на кнопку для сравнения по второму телефону
-        driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '"+ anotherBrand +"')]//ancestor::article//div[contains(@aria-label,'сравнению')]/div"))
+        driver.findElement(By.xpath("//div[@data-zone-name='SearchResults']//article//a[contains(@title, '" + anotherBrand + "')]//ancestor::article//div[contains(@aria-label,'сравнению')]/div"))
                 .click();
         articleTitle = secondArticle.getAttribute("title");
         comparisonPopup = new WebDriverWait(driver, 2).until(
                 ExpectedConditions.visibilityOf(
                         driver.findElement(By.xpath(String.format(popupLocator, articleTitle)))));
         assertEquals("Поп-ап должен отображаться", true, comparisonPopup.isDisplayed());
-        log.info("Перейдем в сравнение - попытаемся найти анимированный поп-ап");
+        log.info("Перейдем в сравнение - попытаемся найти на анимированном поп-апе кнопку перехода в корзину сравнения");
 
-        // КЛАДБИЩЕ ДОМАШНИХ РЕШЕНИЙ
+
+        //TODO КЛАДБИЩЕ ДОМАШНИХ РЕШЕНИЙ
 
         // Данное решение работало у меня, но не работало на бОльшем экране, судя по всему - по сути заглушка, я поднимался и всё
         // Actions actions = new Actions(driver);
@@ -99,22 +102,41 @@ public class ThirdHomework {
         */
 
 
-        //TODO В Мире Костылей - https://stackoverflow.com/questions/44912203/selenium-web-driver-java-element-is-not-clickable-at-point-x-y-other-elem - перепробовал варианты отсюда, все, как один не срабатывали
+        //TODO В Мире Костылей - https://stackoverflow.com/questions/44912203/selenium-web-driver-java-element-is-not-clickable-at-point-x-y-other-elem - перепробовал варианты отсюда,
+        // все, как один не срабатывали...
         // JS тоже не сработал, опять же правильным вариантом мне видится ожидание окончания загрузки анимации - там есть такой вариант, но я не смог найти animated, или навроде того
-        // Но вот этот вариант работает без доп.подпрыгиваний
+        // UPD 15-00 , 19.05 - я нашел скрипт на jQuery - но в случае яндекс маркета тупо не работает!(  НО! Зато нашел полезный скрипт по готовности документа - readyState
+
+        // TODO Старый комент - "Но вот этот вариант работает без доп.подпрыгиваний" - UPD: если замедлить интернет, то вариант с дрыганьем страницы туда-сюда не работает,
+        //  поэтому сэнд кейс UP я закоментил
+
+        //new WebDriverWait(driver, 2).until((WebDriver driver) -> ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete") == true);
+
+        // Написал костыль, пока он спит - люблю его. Первый wait бесполезный, но опять же - замедлить интернет и мб он станет полезен
+        WebElement comparisonButton =
+                new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//span[text()='Сравнить']/parent::a/parent::div"))));
+        Actions actions = new Actions(driver);
+        actions.pause(3000L).moveToElement(comparisonButton).click().build().perform();
+        log.info("--> ЕСЛИ МЫ ТУТ... Значит кнопка Сравнить переиграна и уничтожена как ДЕШЕВКА, как ШВАЛЬ!");
 
 
-        // Написал костыль, пока он спит - люблю его
+        // СТАРЫЙ ВАРИАНТ: ради интереса можно его запустить, думаю, не сработает
+
+        /*
+        TODO спонсор комментариев - Ctrl + Shift + / , для строчки - Ctrl + /
         driver.findElement(By.cssSelector("input#header-search")).sendKeys(Keys.UP);
         driver.findElement(By.cssSelector("input#header-search")).sendKeys(Keys.UP);
         driver.findElement(By.cssSelector("input#header-search")).sendKeys(Keys.UP);
+        */
+        //... и оглушил им кнопку, теперь не убежит. UPD - на другом компе, у вас, думаю, убежала бы
+        //driver.findElement(By.xpath("//span[text()='Сравнить']/parent::a/parent::div")).click();
 
-        //... и оглушил им кнопку, теперь не убежит
-        driver.findElement(By.xpath("//span[text()='Сравнить']/parent::a/parent::div")).click();
+        log.info("Посмотрим наконец, что в корзине сравнения 2 телефона - после того, как мы нашли эту припадочную кнопку");
+        assertEquals(2, driver.findElements(By.xpath("//div[@data-tid='a86a07a1 2d4d9fc1']")).size());
 
-
-        log.info("Посмотрим наконец, что там 2 телефона");
-        assertEquals(2,driver.findElements(By.xpath("//div[@data-tid='a86a07a1 2d4d9fc1']")).size());
+        /*log.info("Порадуем себя маэстро");
+        driver.get("https://www.meme-arsenal.com/create/template/2705171");
+        actions.moveToElement(driver.findElement(By.xpath("//img[@crossorigin='Anonymous']"))).pause(5000L).build().perform();*/
     }
 
 
@@ -124,6 +146,5 @@ public class ThirdHomework {
         if (driver != null)
             driver.quit();
     }
-
 
 }
