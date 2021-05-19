@@ -106,6 +106,8 @@ public class ThirdHomework {
 
         // Написал костыль, пока он спит - люблю его
         driver.findElement(By.cssSelector("input#header-search")).sendKeys(Keys.UP);
+        driver.findElement(By.cssSelector("input#header-search")).sendKeys(Keys.UP);
+        driver.findElement(By.cssSelector("input#header-search")).sendKeys(Keys.UP);
 
         //... и оглушил им кнопку, теперь не убежит
         driver.findElement(By.xpath("//span[text()='Сравнить']/parent::a/parent::div")).click();
