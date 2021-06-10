@@ -1,4 +1,4 @@
-package Tests;
+package JustSimpleTests;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.aeonbits.owner.ConfigFactory;
