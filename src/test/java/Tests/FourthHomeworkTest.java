@@ -1,5 +1,7 @@
 package Tests;
 
+import PageObjects.MainPage;
+import Utils.ConfigForTests;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,20 +18,24 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.concurrent.TimeUnit;
 
 public class FourthHomeworkTest extends TestBase {
-
-
     private Logger logger = LogManager.getLogger(FourthHomeworkTest.class);
 
 
     @Test
-    public void openPage() {
+    public void testAccInfo() {
         // открыть сайт отус
-        driver.get("https://otus.ru/");
-        logger.info("Открыта страница Отус");
+        //driver.get("https://otus.ru/");
+        MainPage mainPage = new MainPage(driver);
+
         // авторизоваться на сайте
-        login();
+        mainPage.goAndLogin();
         // зайти на личный кабинет
-        enterAcc();
+        //TODO добавить новую страницу отуса - выбор разделов
+        mainPage.enterAcc();
+        logger.info("Открыта страница Отус");
+
+
+
         // в разделе о себе заполнить инфу
         driver.findElement(By.cssSelector("a[title = 'О себе']")).click();
 

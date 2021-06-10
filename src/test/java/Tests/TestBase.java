@@ -1,6 +1,8 @@
 package Tests;
 
 import Utils.ConfigForTests;
+import Utils.WebDriverBrowser;
+import Utils.WebDriverFactory;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,12 +19,9 @@ public class TestBase {
 
     @Before
     public void start() {
-
-        //TODO в конструктор
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-
-        logger.info("Драйвер поднят");
+        WebDriverBrowser browser = ConfigForTests.getInstance().getWebDriverBrowser();
+        driver = WebDriverFactory.getDriverForBrowser(browser);
+        logger.info("Драйвер поднят для " + browser);
         driver.manage().timeouts().implicitlyWait(ConfigForTests.getWaiting(), TimeUnit.SECONDS);
         driver.manage().window().maximize();
     }

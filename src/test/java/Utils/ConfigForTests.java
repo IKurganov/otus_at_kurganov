@@ -39,6 +39,14 @@ public class ConfigForTests {
     @Property("waiting")
     private static int waiting;
 
+
+    public WebDriverBrowser getWebDriverBrowser(){
+        if (System.getProperty("browser") != null){
+            browser = System.getProperty("browser");
+        }
+        return WebDriverBrowser.fromString(browser);
+    }
+
     public static String getBaseUrl() {
         return baseUrl;
     }
