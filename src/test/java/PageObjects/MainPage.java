@@ -1,5 +1,6 @@
 package PageObjects;
 
+import PageObjects.PagesInAccount.AccountPage;
 import Tests.FourthHomeworkTest;
 import Utils.ConfigForTests;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 public class MainPage extends BasePage {
-    private Logger logger = LogManager.getLogger(FourthHomeworkTest.class);
+    private Logger logger = LogManager.getLogger(MainPage.class);
     // элементы
     private By logButton = By.cssSelector("button.header2__auth");
     private By loginInput = By.cssSelector("div.new-input-line_slim:nth-child(3) > input");
@@ -24,7 +25,7 @@ public class MainPage extends BasePage {
         super(driver);
     }
 
-    public MainPage goAndLogin() {
+    public MainPage getAndLogin() {
         driver.get(ConfigForTests.getInstance().getBaseUrl());
         driver.findElement(logButton).click();
 
@@ -42,13 +43,9 @@ public class MainPage extends BasePage {
         return this;
     }
 
-    public void enterAcc() {
-        // навести курсор на элемент
+    public AccountPage enterAcc() {
 
-//TODO разобраться, что нужно, а что нет
         Actions actions = new Actions(driver);
-        actions.moveToElement(driver.findElement(avatar))
-                .build().perform();
 
         // как вариант ещё задержаться на 400 миллисекунд методом Pause:
         actions.moveToElement(driver.findElement(avatar))
@@ -57,6 +54,7 @@ public class MainPage extends BasePage {
 
         driver.findElement(personalCab).click();
         logger.info("вошли в личный кабинет");
+        return new AccountPage(driver);
     }
 
 

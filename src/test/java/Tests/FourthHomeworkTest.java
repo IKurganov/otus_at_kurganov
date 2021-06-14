@@ -1,13 +1,10 @@
 package Tests;
 
 import PageObjects.MainPage;
-import Utils.ConfigForTests;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import PageObjects.PagesInAccount.AboutMyselfPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -27,17 +24,14 @@ public class FourthHomeworkTest extends TestBase {
         //driver.get("https://otus.ru/");
         MainPage mainPage = new MainPage(driver);
 
-        // авторизоваться на сайте
-        mainPage.goAndLogin();
-        // зайти на личный кабинет
-        //TODO добавить новую страницу отуса - выбор разделов
-        mainPage.enterAcc();
+        // перейти на сайт и авторизоваться
+        mainPage.getAndLogin();
         logger.info("Открыта страница Отус");
 
+        // зайти на личный кабинет и затем в раздел о себе
+        AboutMyselfPage aboutMyselfPage = mainPage.enterAcc().goToAboutMyselfPage();
 
-
-        // в разделе о себе заполнить инфу
-        driver.findElement(By.cssSelector("a[title = 'О себе']")).click();
+        //TODO - всё внизу поменять на методы и элементы со страницы AboutMyselfPage
 
         // начинаем заполнять, ищем элементы
         WebElement nameRu = driver.findElement(By.id("id_fname"));
@@ -83,75 +77,34 @@ public class FourthHomeworkTest extends TestBase {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("document.querySelector('input#id_ready_to_relocate_1 + span.radio__label',':before').click();");
 
+        //TODO добавление контактов сделать и добавить на пейдже и тут!
+
         // нажать на Сохранить
         actions.moveToElement(saveButton).build().perform();
         saveButton.click();
+
         // проверим, что появилась надпись
         new WebDriverWait(driver, 2)
                 .until(ExpectedConditions
                         .visibilityOf(driver.findElement(By.xpath("//div[contains(@class,'container-padding-top-half')]//span[text() = 'Данные успешно сохранены']"))));
 
         // открываем чистый браузер
-        driver.quit();
-        driver = new ChromeDriver();
-        logger.info("Драйвер поднят ЗАНОВО");
-        driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
-        driver.get("https://otus.ru/");
-        // СНОВА авторизоваться на сайте
-        login();
-        // СНОВА зайти на личный кабинет
-        enterAcc();
-        //перейти в раздел о себе для проверок
-        driver.findElement(By.cssSelector("a[title = 'О себе']")).click();
+        driver.manage().deleteAllCookies();
+        driver.navigate().refresh();
+
+        // снова заходим о себе и прочее
+        mainPage = new MainPage(driver);
+        // перейти на сайт и авторизоваться
+        mainPage.getAndLogin();
+        logger.info("Открыта страница Отус");
+        // зайти на личный кабинет и затем в раздел о себе
+        aboutMyselfPage = mainPage.enterAcc().goToAboutMyselfPage();
+        logger.info("Снова перешли на страницу о себе");
+
         // проверить всё
+        //TODO добавить новые проверки с учетом геттеров из aboutMySelfPage итд данных из пропертей
+
         Assert.assertEquals("Илья", driver.findElement(By.id("id_fname")).getAttribute("value"));
         Assert.assertEquals("Kurganov", driver.findElement(By.id("id_lname_latin")).getAttribute("value"));
     }
-
-    private void login() {
-        // элементы
-        //TODO видимо надо отдельно писать локаторы, потом их искать
-        WebElement logButton = driver.findElement(By.cssSelector("button.header2__auth"));
-
-        //значения
-        String login = "IKurganov@sportmaster.ru";
-        String password = "Goingbackwards229";
-
-        // действия
-        logButton.click();
-        driver.findElement(By.cssSelector("div.new-input-line_slim:nth-child(3) > input")).sendKeys(login);
-        driver.findElement(By.name("password")).sendKeys(password);
-        driver.findElement(By.xpath("//button[normalize-space(text())='Войти']")).click();
-        logger.info("залогинились");
-    }
-
-    private void enterAcc() {
-        // элементы
-        String avatar = "div.ic-blog-default-avatar";
-        String accOption = "a[href='/learning/']";
-
-        //значения
-        String login = "IKurganov@sportmaster.ru";
-        String password = "Goingbackwards229";
-
-        // действия
-        // навести курсор на элемент
-        Actions actions = new Actions(driver);
-        actions.moveToElement(driver.findElement(By.cssSelector(avatar)))
-                .build().perform();
-
-        // как вариант ещё задержаться на 400 миллисекунд методом Pause:
-        actions.moveToElement(driver.findElement(By.cssSelector(avatar)))
-                .pause(400L).build().perform();
-
-
-        WebElement enterLkOption = driver.findElement(By.cssSelector(accOption));
-        //actions.moveToElement(enterLkOption).build().perform();
-        enterLkOption.click();
-
-        logger.info("вошли в личный кабинет");
-    }
-
-
 }
