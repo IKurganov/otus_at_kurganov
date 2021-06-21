@@ -1,4 +1,4 @@
-package Tests;
+package JustSimpleTests;
 
 import org.aeonbits.owner.Config;
 
