@@ -39,6 +39,33 @@ public class ConfigForTests {
     @Property("waiting")
     private static int waiting;
 
+    @Property("nameRu")
+    private static String nameRu;
+
+    @Property("secondnameRu")
+    private static String secondnameRu;
+
+    @Property("nameLatin")
+    private static String nameLatin;
+
+    @Property("secondnameLatin")
+    private static String secondnameLatin;
+
+    @Property("blogName")
+    private static String blogName;
+
+    @Property("birthDate")
+    private static String birthDate;
+
+    @Property("country")
+    private static String country;
+
+    @Property("city")
+    private static String city;
+
+    @Property("relocate")
+    private static boolean relocate;
+
 
     public WebDriverBrowser getWebDriverBrowser(){
         if (System.getProperty("browser") != null){
@@ -85,5 +112,77 @@ public class ConfigForTests {
 
     public static void setWaiting(int waiting) {
         ConfigForTests.waiting = waiting;
+    }
+
+    public static String getNameRu() {
+        return nameRu;
+    }
+
+    public static void setNameRu(String nameRu) {
+        ConfigForTests.nameRu = nameRu;
+    }
+
+    public static String getSecondnameRu() {
+        return secondnameRu;
+    }
+
+    public static void setSecondnameRu(String secondnameRu) {
+        ConfigForTests.secondnameRu = secondnameRu;
+    }
+
+    public static String getNameLatin() {
+        return nameLatin;
+    }
+
+    public static void setNameLatin(String nameLatin) {
+        ConfigForTests.nameLatin = nameLatin;
+    }
+
+    public static String getSecondnameLatin() {
+        return secondnameLatin;
+    }
+
+    public static void setSecondnameLatin(String secondnameLatin) {
+        ConfigForTests.secondnameLatin = secondnameLatin;
+    }
+
+    public static String getBlogName() {
+        return blogName;
+    }
+
+    public static void setBlogName(String blogName) {
+        ConfigForTests.blogName = blogName;
+    }
+
+    public static String getBirthDate() {
+        return birthDate;
+    }
+
+    public static void setBirthDate(String birthDate) {
+        ConfigForTests.birthDate = birthDate;
+    }
+
+    public static String getCountry() {
+        return country;
+    }
+
+    public static void setCountry(String country) {
+        ConfigForTests.country = country;
+    }
+
+    public static String getCity() {
+        return city;
+    }
+
+    public static void setCity(String city) {
+        ConfigForTests.city = city;
+    }
+
+    public static boolean isRelocate() {
+        return relocate;
+    }
+
+    public static void setRelocate(boolean relocate) {
+        ConfigForTests.relocate = relocate;
     }
 }

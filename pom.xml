@@ -23,9 +23,15 @@
                     <argLine>-Dfile.encoding=UTF-8</argLine>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
     <dependencies>
         <!-- https://mvnrepository.com/artifact/junit/junit
         добавил именно такую версию в соответствии с ДЗ -->

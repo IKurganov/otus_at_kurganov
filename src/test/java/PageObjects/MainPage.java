@@ -30,10 +30,8 @@ public class MainPage extends BasePage {
         driver.findElement(logButton).click();
 
         //значения
-        //TODO вынести значения
-
-        String login = "IKurganov@sportmaster.ru";
-        String password = "Goingbackwards229";
+        String login = ConfigForTests.getInstance().getUserLogin();
+        String password = ConfigForTests.getInstance().getUserPassword();
 
         // действия
         driver.findElement(loginInput).sendKeys(login);
