@@ -1,6 +1,7 @@
 package JustSimpleTests;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.qameta.allure.*;
 import org.aeonbits.owner.ConfigFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,14 +37,19 @@ public class ThirdHomework {
     }
 
     @Test
+    @Flaky
+    @Epic("Тест яндекс маркета для отус")
+    @Feature("Добавление товаров для сравнения при помощи кнопки")
+    @Story("Добавление двух телефонов для сравнения")
+    @Description("Протестим добавление телефонов")
     public void yandexMarketTest() {
-        driver.get(testConfig.yandexMarketUrl());
-        log.info("Сайт яндекс маркета открыт");
-        log.info("Проведём тестирование маркета и перейдем на электронику");
-        driver.findElement(By.xpath("//span[text() = 'Электроника']")).click();
 
-        log.info("Перейдем на смартфоны");
-        driver.findElement(By.xpath("//a[normalize-space(text()) = 'Смартфоны']")).click();
+        // пробные шаги просто, чтобы были steps
+        goTOYandex();
+
+        goToMarketsSmartphones();
+
+
         // найдем контейнер с брендами, от него выделим самсунг и хаоми
         WebElement brandsFilter = driver.findElement(By.xpath("//fieldset[@data-autotest-id = '7893318']"));
 
@@ -114,7 +120,8 @@ public class ThirdHomework {
 
         // Написал костыль, пока он спит - люблю его. Первый wait бесполезный, но опять же - замедлить интернет и мб он станет полезен
         WebElement comparisonButton =
-                new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//span[text()='Сравнить']/parent::a/parent::div"))));
+                //new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//span[text()='Сравнить']/parent::a/parent::div"))));
+        new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//a[@data-tid='569d74c7' and text()='Сравнить']"))));
         Actions actions = new Actions(driver);
         actions.pause(3000L).moveToElement(comparisonButton).click().build().perform();
         log.info("--> ЕСЛИ МЫ ТУТ... Значит кнопка Сравнить переиграна и уничтожена как ДЕШЕВКА, как ШВАЛЬ!");
@@ -137,6 +144,21 @@ public class ThirdHomework {
         /*log.info("Порадуем себя маэстро");
         driver.get("https://www.meme-arsenal.com/create/template/2705171");
         actions.moveToElement(driver.findElement(By.xpath("//img[@crossorigin='Anonymous']"))).pause(5000L).build().perform();*/
+    }
+
+    @Step("Переход на Яндекс - открываем сайт")
+    public void goTOYandex(){
+        driver.get(testConfig.yandexMarketUrl());
+        log.info("Сайт яндекс маркета открыт");
+    }
+
+    @Step("Ищем смартфоны в электронике - и переходим на соответствующую страницу")
+    public void goToMarketsSmartphones(){
+        log.info("Проведём тестирование маркета и перейдем на электронику");
+        driver.findElement(By.xpath("//span[text() = 'Электроника']")).click();
+
+        log.info("Перейдем на смартфоны");
+        driver.findElement(By.xpath("//a[normalize-space(text()) = 'Смартфоны']")).click();
     }
 
 
