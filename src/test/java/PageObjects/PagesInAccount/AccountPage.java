@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 
 public class AccountPage extends BasePage {
 
-    //TODO можно было сделать через enum
+
     private By aboutMyself = By.cssSelector("a[title = 'О себе']");
     private By myCourses;
     private By payment;
@@ -17,6 +17,7 @@ public class AccountPage extends BasePage {
     public AccountPage(WebDriver driver) {
         super(driver);
     }
+
 
     public AboutMyselfPage goToAboutMyselfPage(){
         driver.findElement(aboutMyself).click();
